@@ -3,6 +3,8 @@ Snackbar.js
 
 A simple implementation of the snackbar message pops up at the bottom of the page.
 
+view README.md for more in depth documentation
+
 All options passed when creating the snackbar object are default. Overrides can
 be passed in each call to display a message.
 
@@ -33,19 +35,24 @@ this.Snackbar = function(options) {
     time: ms of time before automatic close. (ignored if manual_close: true)
       Default: 5000
     class: String containing desired classes.
-      Default: empty
+      Default: null
   ************/
   options = options || {manual_close: false, time: 5000};
 
   /**********
   / PUBLIC FUNCTIONS
   /**********/
+
+  // Main function to display the snackbar
+  // message: text to display
+  // opt: default override options to send
   this.message = function(message, opts) {
     var _this = this;
     opts = Object.assign({},options,opts);
     var $snackbar = _addSnackbar(message, opts);
     _fadeIn($snackbar);
 
+    // If not manual_close then set timeout for removal
     if (!opts.manual_close) {
       setTimeout(function() {
         _removeSnackbar($snackbar);
@@ -54,6 +61,8 @@ this.Snackbar = function(options) {
   }
 
 	// Helper for message that sticks until manually closed
+  // message: text to display
+  // opt: default override options to send
   this.stickyMessage = function(message, opts) {
     opts = Object.assign({},options,opts);
     opts.manual_close = true;
@@ -61,6 +70,8 @@ this.Snackbar = function(options) {
   }
 
   // Helper for success snackbar
+  // message: text to display
+  // opt: default override options to send
   this.success = function(message, opts) {
     opts = Object.assign({},options,opts);
     opts.class = opts.class || '';
@@ -69,6 +80,8 @@ this.Snackbar = function(options) {
   }
 
   // Helper for error snackbar
+  // message: text to display
+  // opt: default override options to send
   this.error = function(message, opts) {
     opts = Object.assign({},options,opts);
     opts.class = opts.class || '';
@@ -76,7 +89,9 @@ this.Snackbar = function(options) {
     this.message(message, opts);
 	}
 
-  // Helper for error snackbar
+  // Helper for warn snackbar
+  // message: text to display
+  // opt: default override options to send
   this.warn = function(message, opts) {
     opts = Object.assign({},options,opts);
     opts.class = opts.class || '';
@@ -84,25 +99,31 @@ this.Snackbar = function(options) {
     this.message(message, opts);
 	}
 
+  /********
+  / END PUBLIC FUNCTIONS
+  *********/
+
+
   /**********
   / PRIVATE FUNCTIONS
   /**********/
+
   // Setup the elemends on the DOM
   _setDom = function() {
     var _this = this;
     var $body = $('body');
-    // If the DOM is ready
+    // If the Body exists is ready
     if ($body.length > 0){
-      // Add Spinner if not in DOM already
+      // Add snackbar wrapper if not in DOM already
       if ($('#snackbar-wrapper').length == 0) {
         var $outer_wrapper = $('<div id="snackbar-wrapper">');
         $body.append($outer_wrapper);
       }
     }
     else {
-      // if DOM is not ready to call when initialized
+      // if body is not available to call when document is ready
       $(function() {
-        _setDom()
+        _setDom();
       });
     }
   };
@@ -138,19 +159,20 @@ this.Snackbar = function(options) {
     }
   };
 
-  //Remove a snackbar
+  // Remove a snackbar
   _removeSnackbar = function($el) {
     _fadeOut($el, function() {
+      // Remove the individual snackbar
       $el.remove();
     });
   };
 
-  //Fade in individual snackbar
+  // ade in individual snackbar
   _fadeIn = function($el) {
     $el.animate({opacity: 1}, 500);
   };
 
-  //Fade out individual snackbar
+  // Fade out individual snackbar
   _fadeOut = function($el, end) {
     $el.animate({opacity: 0}, 500, end);
   };
