@@ -112,7 +112,7 @@ this.Snackbar = function(options) {
   _setDom = function() {
     var _this = this;
     var $body = $('body');
-    // If the Body exists is ready
+    // If the Body exists
     if ($body.length > 0){
       // Add snackbar wrapper if not in DOM already
       if ($('#snackbar-wrapper').length == 0) {
@@ -121,7 +121,7 @@ this.Snackbar = function(options) {
       }
     }
     else {
-      // if body is not available to call when document is ready
+      // if body is not available then call when document is ready
       $(function() {
         _setDom();
       });
@@ -167,7 +167,7 @@ this.Snackbar = function(options) {
     });
   };
 
-  // ade in individual snackbar
+  // Fade in individual snackbar
   _fadeIn = function($el) {
     $el.animate({opacity: 1}, 500);
   };
