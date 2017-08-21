@@ -1,0 +1,63 @@
+# Snackbar.js
+
+A simple implementation of the snackbar message pops up at the bottom of the page.
+
+All options passed when creating the snackbar object are default. Overrides can
+be passed in each call to display a message.
+
+## Dependencies
+* jQuery
+
+## Usage
+
+#### Create Snackbar
+```javascript
+  // New snackbar with defaults
+  var snack = new Snackbar();
+
+  // New snackbar with custom default time
+  var snack = new Snackbar({time: 2000});
+```
+
+All options passed when creating the snackbar object are default. Overrides can
+be passed in each call to display a message.
+
+##### Options
+* `manual_close`: Boolean. Provide a close X button (true) vs timed close (false). *Default:* false
+* `time`: ms of time before automatic close. (ignored if manual_close: true). *Default:* 5000
+* `class`: String containing desired classes to add to snackbar. *Default:* empty
+
+*Note:* A new snackbar object will not inject new `#snackbar-wrapper` elements. It simply creates a new object with a different set of default options.
+
+#### Displaying Messages
+*Basics:*
+```javascript
+  // Display a message
+  snack.message('Hello World');
+
+  // Helper functions:
+  // Display a message that must be removed manually ->
+  snack.stickyMessage('Acknowledge me!');
+  // Display a message with a green background (adds class 'success') ->
+  snack.success('You did it!');
+  // Display a message with a red backbround (adds class 'error') ->
+  snack.error("Something didn't work");
+  // Display a message with a orangish/yellow backbround (adds class 'warn') ->
+  snack.warn("I'd be careful if I were you...");
+```
+
+#### Overriding Default options
+
+```javascript
+  // New snackbar with defaults
+  var snack = new Snackbar();
+  // Require use to close message just this one time
+  snack.message('Read this', {manual_close: true})
+
+  // New snackbar with custom default time
+  var snack = new Snackbar({time: 2000});
+  // Make this message stick longer
+  var snack = new Snackbar({time: 7500});
+  // Add your own classes to the snackbar
+  var snack = new Snackbar({class: 'my-snackbar your-snackbar'})
+```

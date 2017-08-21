@@ -40,6 +40,10 @@
 	background-color: #bb2222;
 }
 
+#snackbar-wrapper .warn {
+	background-color: #f3b300;
+}
+
 #snackbar-wrapper .snackbar-close i {
   font: normal normal normal 20px/1 FontAwesome;
   font-size: inherit;
