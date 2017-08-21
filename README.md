@@ -54,7 +54,7 @@ be passed in each call to display a message.
   // New snackbar with custom default time
   var snack = new Snackbar({time: 2000});
   // Make this message stick longer than default
-  var snack = new Snackbar({time: 7500});
+  snack.message("A slightly longer message..."), {time: 7500});
   // Add your own classes to the snackbar
-  var snack = new Snackbar({class: 'my-snackbar your-snackbar'})
+  snack.message("My special snackbar", {class: 'my-snackbar your-snackbar'})
 ```
