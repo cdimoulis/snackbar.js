@@ -2,9 +2,6 @@
 
 A simple implementation of the snackbar message pops up at the bottom of the page.
 
-All options passed when creating the snackbar object are default. Overrides can
-be passed in each call to display a message.
-
 ## Dependencies
 * jQuery
 
@@ -27,7 +24,7 @@ be passed in each call to display a message.
 * `time`: ms of time before automatic close. (ignored if manual_close: true). *Default:* 5000
 * `class`: String containing desired classes to add to snackbar. *Default:* empty
 
-*Note:* A new snackbar object will not inject new `#snackbar-wrapper` elements. It simply creates a new object with a different set of default options.
+*Note:* A new snackbar object will not inject new `#snackbar-wrapper` elements. It simply creates a new object with a different set of default options for displaying a snackbar.
 
 #### Displaying Messages
 *Basics:*
@@ -51,12 +48,12 @@ be passed in each call to display a message.
 ```javascript
   // New snackbar with defaults
   var snack = new Snackbar();
-  // Require use to close message just this one time
+  // Require user to close message just this one time
   snack.message('Read this', {manual_close: true})
 
   // New snackbar with custom default time
   var snack = new Snackbar({time: 2000});
-  // Make this message stick longer
+  // Make this message stick longer than default
   var snack = new Snackbar({time: 7500});
   // Add your own classes to the snackbar
   var snack = new Snackbar({class: 'my-snackbar your-snackbar'})
