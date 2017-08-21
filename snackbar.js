@@ -1,5 +1,6 @@
 /***************
 Snackbar.js
+https://github.com/cdimoulis/snackbar.js
 
 A simple implementation of the snackbar message pops up at the bottom of the page.
 
