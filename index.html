@@ -6,8 +6,50 @@
   <script src='https://code.jquery.com/jquery-3.2.1.min.js' integrity='sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=' crossorigin='anonymous'></script>
   <script type='text/javascript' src='snackbar.js'></script>
 
+  <script type='text/javascript' src='example.js'></script>
+
+  <style type='text/css'>
+    #snackbar-wrapper .my-snackbar {
+      background-color: purple;
+    }
+
+    .clickable {
+      cursor: pointer;
+    }
+    .clickable:hover {
+      color: blue;
+    }
+    .examples {
+      font-family: sans-serif;
+    }
+  </style>
+
 </head>
 <body>
+  <h2>
+    Examples
+  </h2>
+
+  <div class='examples'>
+    <h4>var snack = new Snackbar();</h4>
+    <div class='clickable' onclick='hello()'>
+      snack.message('Hello World');
+    </div>
+    <div class='clickable' onclick='sticky()'>
+      snack.stickyMessage('Acknowledge me!');
+    </div>
+    <div class='clickable' onclick='success()'>
+      snack.success('You did it!');
+    </div>
+    <div class='clickable' onclick='error()'>
+      snack.error("Something didn't work");
+    </div>
+    <div class='clickable' onclick='warn()'>
+      snack.warn("I'd be careful if I were you...");
+    </div>
+    <div class='clickable' onclick='custom()'>
+      snack.message("My special snackbar", {class: 'my-snackbar your-snackbar'})
+    </div>
 
 </body>
 </html>
