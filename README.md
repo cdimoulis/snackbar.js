@@ -37,9 +37,9 @@ be passed in each call to display a message.
   snack.stickyMessage('Acknowledge me!');
   // Display a message with a green background (adds class 'success') ->
   snack.success('You did it!');
-  // Display a message with a red backbround (adds class 'error') ->
+  // Display a message with a red background (adds class 'error') ->
   snack.error("Something didn't work");
-  // Display a message with a orangish/yellow backbround (adds class 'warn') ->
+  // Display a message with a orangish/yellow background (adds class 'warn') ->
   snack.warn("I'd be careful if I were you...");
 ```
 
