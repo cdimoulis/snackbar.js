@@ -1,6 +1,7 @@
 # Snackbar.js
 
-A simple implementation of the snackbar message pops up at the bottom of the page.
+A simple implementation of the snackbar message pops up at the bottom of the page.  
+View exmple at https://chrisdimoulis.com/snackbar.js
 
 ## Dependencies
 * jQuery
