@@ -22,3 +22,7 @@ function custom() {
   var snack = new Snackbar();
   snack.message("My special snackbar", {class: 'my-snackbar your-snackbar'})
 }
+function quick() {
+  var snack = new Snackbar();
+  snack.message("QUICK!", {time: 500})
+}

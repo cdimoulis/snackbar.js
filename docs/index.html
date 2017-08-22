@@ -2,11 +2,11 @@
 <html>
 <haed>
 
-  <link href='snackbar.css' rel='stylesheet' type='text/css' />
+  <link href='../snackbar.css' rel='stylesheet' type='text/css' />
   <script src='https://code.jquery.com/jquery-3.2.1.min.js' integrity='sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=' crossorigin='anonymous'></script>
-  <script type='text/javascript' src='snackbar.js'></script>
+  <script type='text/javascript' src='../snackbar.js'></script>
 
-  <script type='text/javascript' src='example.js'></script>
+  <script type='text/javascript' src='../example.js'></script>
 
   <style type='text/css'>
     .snackbar.my-snackbar {
@@ -22,6 +22,13 @@
     .examples {
       font-family: sans-serif;
     }
+
+    h4 {
+      margin-bottom: 3px;
+    }
+    h5 {
+      margin-top: 0px;
+    }
   </style>
 
 </head>
@@ -32,6 +39,7 @@
 
   <div class='examples'>
     <h4>var snack = new Snackbar();</h4>
+    <h5>Click on example to view:</h5>
     <div class='clickable' onclick='hello()'>
       snack.message('Hello World');
     </div>
@@ -50,6 +58,10 @@
     <div class='clickable' onclick='custom()'>
       snack.message("My special snackbar", {class: 'my-snackbar your-snackbar'})
     </div>
+    <div class='clickable' onclick='quick()'>
+      snack.message("QUICK!", {time: 500})
+    </div>
+  </div>
 
 </body>
 </html>
