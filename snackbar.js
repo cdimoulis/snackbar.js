@@ -246,7 +246,7 @@ this.Snackbar = function(options) {
     // Otherwise attach the state change event
     else if (document.attachEvent) {
       document.attachEvent('onreadystatechange'), function() {
-        if (document.readyState === 'complete') {
+        if (document.readyState === 'interactive') {
           document.detachEvent('onreadystatechange',arguments.callee);
           cb();
         }
