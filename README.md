@@ -4,7 +4,7 @@ A simple implementation of the snackbar message pops up at the bottom of the pag
 View exmple at http://chrisdimoulis.com/snackbar.js
 
 ## Dependencies
-* jQuery
+**None!**
 
 ## Usage
 
