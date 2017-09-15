@@ -50,13 +50,18 @@ this.Snackbar = function(options) {
   this.message = function(message, opts) {
     opts = Object.assign({},options,opts);
     var _snackbar = _addSnackbar(message, opts);
-    _fadeIn(_snackbar);
+    if (_snackbar) {
+      _fadeIn(_snackbar);
 
-    // If not manual_close then set timeout for removal
-    if (!opts.manual_close) {
-      setTimeout(function() {
-        _removeSnackbar(_snackbar);
-      }, opts.time);
+      // If not manual_close then set timeout for removal
+      if (!opts.manual_close) {
+        setTimeout(function() {
+          _removeSnackbar(_snackbar);
+        }, opts.time);
+      }
+    }
+    else {
+      console.warn('Snackbar: DOM must not be ready yet...');
     }
   }
 
@@ -143,6 +148,7 @@ this.Snackbar = function(options) {
       }
       _snackbar.className = snk_bar_class;
 
+      // Text node
       var _text_wrapper = document.createElement('span');
       _text_wrapper.className = 'snackbar-text';
       _text_wrapper.appendChild(document.createTextNode(message));
@@ -151,8 +157,8 @@ this.Snackbar = function(options) {
       if (opts.manual_close) {
         var _close = document.createElement('span');
         _close.className = 'snackbar-close';
-        var _fa = document.createElement('i');
-        _close.appendChild(_fa);
+        var _x = document.createTextNode('X');
+        _close.appendChild(_x);
         // Apply click event for X
         _close.onclick = function(){
           _removeSnackbar(_snackbar);
