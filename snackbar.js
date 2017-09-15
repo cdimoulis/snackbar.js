@@ -111,14 +111,15 @@ this.Snackbar = function(options) {
 
   // Setup the elemends on the DOM
   _setDom = function() {
-    var _this = this;
-    var $body = $('body');
+    var _body = document.getElementsByTagName('body')[0];
+
     // If the Body exists
-    if ($body.length > 0){
-      // Add snackbar wrapper if not in DOM already
-      if ($('#snackbar-wrapper').length == 0) {
-        var $outer_wrapper = $('<div id="snackbar-wrapper">');
-        $body.append($outer_wrapper);
+    if (_body) {
+      // Add snackbar if not in DOM already
+      if (!document.getElementById('snackbar-wrapper')) {
+        var _outer_wrapper = document.createElement('div');
+        _outer_wrapper.id = 'snackbar-wrapper';
+        _body.appendChild(_outer_wrapper);
       }
     }
     else {
