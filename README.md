@@ -8,6 +8,9 @@ View exmple at http://chrisdimoulis.com/snackbar.js
 
 ## Usage
 
+#### Includes
+Simply include snackbar.js and snackbar.css on your page.
+
 #### Create Snackbar
 ```javascript
   // New snackbar with defaults
