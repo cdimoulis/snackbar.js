@@ -122,10 +122,8 @@ this.Snackbar = function(options) {
       }
     }
     else {
-      // if body is not available then call when document is ready
-      $(function() {
-        _setDom();
-      });
+      // if body is not available then call when DOM is ready
+      _ready(_setDom);
     }
   };
 
@@ -176,6 +174,26 @@ this.Snackbar = function(options) {
   // Fade out individual snackbar
   _fadeOut = function($el, end) {
     $el.animate({opacity: 0}, 500, end);
+  };
+
+  // Callback when DOM is ready
+  _ready = function(cb) {
+    // If add event listener is available
+    if (document.addEventListener) {
+      document.addEventListener('DOMContentLoaded', function() {
+        document.removeEventListener('DOMContentLoaded', arguments.callee);
+        cb();
+      });
+    }
+    // Otherwise attach the state change event
+    else if (document.attachEvent) {
+      document.attachEvent('onreadystatechange'), function() {
+        if (document.readyState === 'complete') {
+          document.detachEvent('onreadystatechange',arguments.callee);
+          cb();
+        }
+      }
+    }
   };
   /**********
   / END PRIVATE FUNCTIONS
