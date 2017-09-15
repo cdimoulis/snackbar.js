@@ -48,15 +48,14 @@ this.Snackbar = function(options) {
   // message: text to display
   // opt: default override options to send
   this.message = function(message, opts) {
-    var _this = this;
     opts = Object.assign({},options,opts);
-    var $snackbar = _addSnackbar(message, opts);
-    _fadeIn($snackbar);
+    var _snackbar = _addSnackbar(message, opts);
+    _fadeIn(_snackbar);
 
     // If not manual_close then set timeout for removal
     if (!opts.manual_close) {
       setTimeout(function() {
-        _removeSnackbar($snackbar);
+        _removeSnackbar(_snackbar);
       }, opts.time);
     }
   }
@@ -112,7 +111,6 @@ this.Snackbar = function(options) {
   // Setup the elemends on the DOM
   _setDom = function() {
     var _body = document.getElementsByTagName('body')[0];
-
     // If the Body exists
     if (_body) {
       // Add snackbar if not in DOM already
@@ -122,8 +120,8 @@ this.Snackbar = function(options) {
         _body.appendChild(_outer_wrapper);
       }
     }
+    // if body is not available then call when DOM is ready
     else {
-      // if body is not available then call when DOM is ready
       _ready(_setDom);
     }
   };
@@ -133,48 +131,87 @@ this.Snackbar = function(options) {
   // opt: options to send
   _addSnackbar = function(message, opts) {
     var _this = this;
-    var $snackbar_wrapper = $('#snackbar-wrapper');
-    if ($snackbar_wrapper.length > 0) {
-      var $snackbar = $("<div class='snackbar'>");
-      // Add Classes to snackbar
+    var _snackbar_wrapper = document.getElementById('snackbar-wrapper');
+    // Only create snackbar if snackbar wrapper is in DOM
+    if (_snackbar_wrapper) {
+      var _snackbar = document.createElement('div');
+      // Class names for snackbar element
+      var snk_bar_class = 'snackbar';
+      // Add option classes to snackbar
       if (opts.class) {
-        $snackbar.addClass(opts.class);
+        snk_bar_class += ' '+opts.class;
       }
-      var $text_wrapper = $('<span class="snackbar-text">');
-      $text_wrapper.html(message);
-      $snackbar.append($text_wrapper);
+      _snackbar.className = snk_bar_class;
+
+      var _text_wrapper = document.createElement('span');
+      _text_wrapper.className = 'snackbar-text';
+      _text_wrapper.appendChild(document.createTextNode(message));
+      _snackbar.appendChild(_text_wrapper);
       // Add X for manual close
       if (opts.manual_close) {
-        var $close = $('<span class="snackbar-close">');
-        var $fa = $('<i>');
-        $close.append($fa);
+        var _close = document.createElement('span');
+        _close.className = 'snackbar-close';
+        var _fa = document.createElement('i');
+        _close.appendChild(_fa);
         // Apply click event for X
-        $close.click(function() {
-          _removeSnackbar($snackbar);
-        });
-        $snackbar.append($close);
+        _close.onclick = function(){
+          _removeSnackbar(_snackbar);
+        };
+        _snackbar.appendChild(_close);
       }
-      $snackbar_wrapper.append($snackbar);
-      return $snackbar;
+      _snackbar_wrapper.appendChild(_snackbar);
+      return _snackbar;
     }
   };
 
   // Remove a snackbar
-  _removeSnackbar = function($el) {
-    _fadeOut($el, function() {
+  _removeSnackbar = function(_el) {
+    _fadeOut(_el, function() {
       // Remove the individual snackbar
-      $el.remove();
+      _el.remove();
     });
   };
 
   // Fade in individual snackbar
-  _fadeIn = function($el) {
-    $el.animate({opacity: 1}, 500);
+  _fadeIn = function(_el) {
+    _changeOpacity(_el, 1, 500);
   };
 
   // Fade out individual snackbar
-  _fadeOut = function($el, end) {
-    $el.animate({opacity: 0}, 500, end);
+  _fadeOut = function(_el, cb) {
+    _changeOpacity(_el, 0, 500, cb);
+  };
+
+  // Change opacity
+  //   _el: element
+  //   value: the opacity value
+  //   time: the amount of time
+  //   cb: callback when done
+  _changeOpacity = function(_el, value, time, cb) {
+    // rate of change
+    var fps = 24;
+    var time_per_frame = time/fps;
+    // current opacity
+    var current_opacity = parseFloat(_el.style.opacity) || 0;
+    // change for opacity
+    var diff = value - current_opacity;
+    var delta = diff/time_per_frame;
+    var interval = setInterval(change, time_per_frame);
+    function change() {
+      // Set new opacity
+      current_opacity += delta;
+      current_opacity = current_opacity < 0 ? 0 : current_opacity;
+      current_opacity = current_opacity > 1 ? 1 : current_opacity;
+      _el.style.opacity = current_opacity;
+      // Check if done
+      if (current_opacity === 1 || current_opacity === 0){
+        // Call cb if exists
+        if (cb)
+          cb();
+        // End interval
+        clearInterval(interval);
+      }
+    }
   };
 
   // Callback when DOM is ready
