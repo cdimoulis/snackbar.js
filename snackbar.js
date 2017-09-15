@@ -39,6 +39,8 @@ this.Snackbar = function(options) {
       Default: null
   ************/
   options = options || {manual_close: false, time: 5000};
+  // If called before DOM is ready then maintain list to execute;
+  var pre_dom_queue = [];
 
   /**********
   / PUBLIC FUNCTIONS
@@ -50,9 +52,9 @@ this.Snackbar = function(options) {
   this.message = function(message, opts) {
     opts = Object.assign({},options,opts);
     var _snackbar = _addSnackbar(message, opts);
+    // Show if _snackbar Element is created
     if (_snackbar) {
       _fadeIn(_snackbar);
-
       // If not manual_close then set timeout for removal
       if (!opts.manual_close) {
         setTimeout(function() {
@@ -60,8 +62,9 @@ this.Snackbar = function(options) {
         }, opts.time);
       }
     }
+    // Add to queue to show after DOM is ready
     else {
-      console.warn('Snackbar: DOM must not be ready yet...');
+      pre_dom_queue.push({snackbar: this, message: message, opts: opts});
     }
   }
 
@@ -114,7 +117,7 @@ this.Snackbar = function(options) {
   /**********/
 
   // Setup the elemends on the DOM
-  _setDom = function() {
+  var _setDom = function() {
     var _body = document.getElementsByTagName('body')[0];
     // If the Body exists
     if (_body) {
@@ -124,6 +127,8 @@ this.Snackbar = function(options) {
         _outer_wrapper.id = 'snackbar-wrapper';
         _body.appendChild(_outer_wrapper);
       }
+      if (pre_dom_queue.length > 0)
+        _flushQueue();
     }
     // if body is not available then call when DOM is ready
     else {
@@ -131,10 +136,19 @@ this.Snackbar = function(options) {
     }
   };
 
+  // Flush out the pre_dom_queue
+  var _flushQueue = function() {
+    for(i = 0; i < pre_dom_queue.length; i++) {
+      var sb = pre_dom_queue[i];
+      sb.snackbar.message(sb.message, sb.opts);
+    }
+    pre_dom_queue = [];
+  };
+
   // Add the snackbar
   // message: text to display
   // opt: options to send
-  _addSnackbar = function(message, opts) {
+  var _addSnackbar = function(message, opts) {
     var _this = this;
     var _snackbar_wrapper = document.getElementById('snackbar-wrapper');
     // Only create snackbar if snackbar wrapper is in DOM
@@ -171,7 +185,7 @@ this.Snackbar = function(options) {
   };
 
   // Remove a snackbar
-  _removeSnackbar = function(_el) {
+  var _removeSnackbar = function(_el) {
     _fadeOut(_el, function() {
       // Remove the individual snackbar
       _el.remove();
@@ -179,12 +193,12 @@ this.Snackbar = function(options) {
   };
 
   // Fade in individual snackbar
-  _fadeIn = function(_el) {
+  var _fadeIn = function(_el) {
     _changeOpacity(_el, 1, 500);
   };
 
   // Fade out individual snackbar
-  _fadeOut = function(_el, cb) {
+  var _fadeOut = function(_el, cb) {
     _changeOpacity(_el, 0, 500, cb);
   };
 
@@ -193,7 +207,7 @@ this.Snackbar = function(options) {
   //   value: the opacity value
   //   time: the amount of time
   //   cb: callback when done
-  _changeOpacity = function(_el, value, time, cb) {
+  var _changeOpacity = function(_el, value, time, cb) {
     // rate of change
     var fps = 24;
     var time_per_frame = time/fps;
@@ -221,7 +235,7 @@ this.Snackbar = function(options) {
   };
 
   // Callback when DOM is ready
-  _ready = function(cb) {
+  var _ready = function(cb) {
     // If add event listener is available
     if (document.addEventListener) {
       document.addEventListener('DOMContentLoaded', function() {

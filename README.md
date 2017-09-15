@@ -11,6 +11,9 @@ View exmple at http://chrisdimoulis.com/snackbar.js
 #### Includes
 Simply include snackbar.js and snackbar.css on your page.
 
+#### Pre DOM ready
+If you create a snackbar and create a message before the DOM is ready the message will be stored in a queue which which will execute once the DOM is ready.
+
 #### Create Snackbar
 ```javascript
   // New snackbar with defaults
