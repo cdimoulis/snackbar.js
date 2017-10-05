@@ -1,0 +1,12 @@
+# Node stuff
+.nvmrc
+*.log
+
+# We do not commit node modules, builds, coverage and temp
+/build
+/coverage
+/node_modules
+/tmp
+
+# MACs come on
+.DS_Store
