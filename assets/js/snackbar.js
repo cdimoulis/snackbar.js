@@ -99,7 +99,7 @@ Display a message with a orangish/yellow backbround (adds class 'warn') ->
 
 ****************/
 
-var Snackbar = function Snackbar(options) {
+window.Snackbar = function (options) {
   /************
   Feature wide options. These options will be set at all time unless
   overridden by options passed in each call
@@ -208,7 +208,7 @@ var Snackbar = function Snackbar(options) {
 
   // Flush out the pre_dom_queue
   var _flushQueue = function _flushQueue() {
-    for (i = 0; i < pre_dom_queue.length; i++) {
+    for (var i = 0; i < pre_dom_queue.length; i++) {
       var sb = pre_dom_queue[i];
       sb.snackbar.message(sb.message, sb.opts);
     }
@@ -308,7 +308,7 @@ var Snackbar = function Snackbar(options) {
     // If add event listener is available
     if (document.addEventListener) {
       document.addEventListener('DOMContentLoaded', function () {
-        document.removeEventListener('DOMContentLoaded', arguments.callee);
+        document.removeEventListener('DOMContentLoaded', this.callee);
         cb();
       });
     }
@@ -316,7 +316,7 @@ var Snackbar = function Snackbar(options) {
     else if (document.attachEvent) {
         document.attachEvent('onreadystatechange'), function () {
           if (document.readyState === 'interactive') {
-            document.detachEvent('onreadystatechange', arguments.callee);
+            document.detachEvent('onreadystatechange', this.callee);
             cb();
           }
         };
