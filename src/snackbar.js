@@ -205,8 +205,8 @@ class Snackbar {
 *******/
 
 // Fade in individual snackbar
-function _fadeIn(_el) {
-  _changeOpacity(_el, 1, 500);
+function _fadeIn(_el, cb) {
+  _changeOpacity(_el, 1, 500, cb);
 };
 
 // Fade out individual snackbar
@@ -257,12 +257,12 @@ function _ready(cb) {
   }
   // Otherwise attach the state change event
   else if (document.attachEvent) {
-    document.attachEvent('onreadystatechange'), function() {
-      if (document.readyState === 'interactive') {
+    document.attachEvent('onreadystatechange', function() {
+      if (document.readyState === 'interactive' || document.readyState === 'complete') {
         document.detachEvent('onreadystatechange', this.callee);
         cb();
       }
-    }
+    });
   }
 };
 

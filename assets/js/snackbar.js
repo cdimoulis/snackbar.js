@@ -318,9 +318,13 @@ var Snackbar = function () {
 /**********/
 ;
 
+/*******
+* Helper FUNCTIONS
+*******/
+
 // Fade in individual snackbar
-function _fadeIn(_el) {
-  _changeOpacity(_el, 1, 500);
+function _fadeIn(_el, cb) {
+  _changeOpacity(_el, 1, 500, cb);
 };
 
 // Fade out individual snackbar
