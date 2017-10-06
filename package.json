@@ -20,7 +20,7 @@
     "url": "https://github.com/cdimoulis/snackbar.js.git"
   },
   "scripts": {
-    "test": "jest --coverage",
+    "test": "jest",
     "build": "webpack --config ./configs/webpack_build.config.js",
     "bundle": "webpack --config ./configs/webpack_bundle.config.js",
     "coverage": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
@@ -38,5 +38,13 @@
     "coveralls": "^3.0.0",
     "jest": "^21.2.0"
   },
-  "jest": {}
+  "jest": {
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "src/**.js",
+      "!**/node_modules/**",
+      "!**/assets/**",
+      "!**/configs/**"
+    ]
+  }
 }

@@ -1,5 +1,9 @@
 require('../src/snackbar');
 
+afterAll( () => {
+  clearElement(document.body);
+});
+
 // Remove the body before each test since this is the goal of this file
 describe('Pre Dom actions', () => {
   let s; // Snackbar
