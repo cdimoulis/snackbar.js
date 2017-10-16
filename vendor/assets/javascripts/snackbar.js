@@ -143,13 +143,16 @@ var Snackbar = function () {
       var _snackbar = this._addSnackbar(_message, opts);
       // Show if _snackbar Element is created
       if (_snackbar) {
-        _fadeIn(_snackbar);
-        // If not manual_close then set timeout for removal
-        if (!opts.manual_close) {
-          setTimeout(function () {
-            _this2._removeSnackbar(_snackbar);
-          }, opts.time);
-        }
+
+        // Fade in and when complete set timeout for fade out if not manual close
+        return _fadeIn(_snackbar).then(function () {
+          // If not manual_close then set timeout for removal
+          if (!opts.manual_close) {
+            setTimeout(function () {
+              _this2._removeSnackbar(_snackbar);
+            }, opts.time);
+          }
+        });
       }
       // Add to queue to show after DOM is ready
       else {
@@ -303,8 +306,8 @@ var Snackbar = function () {
 
     // Remove a snackbar
     value: function _removeSnackbar(_el) {
-      _fadeOut(_el, function () {
-        // Remove the individual snackbar
+      // _fadeOut returns a promise to use for completion
+      return _fadeOut(_el).then(function () {
         _el.remove();
       });
     }
@@ -323,21 +326,25 @@ var Snackbar = function () {
 *******/
 
 // Fade in individual snackbar
-function _fadeIn(_el, cb) {
-  _changeOpacity(_el, 1, 500, cb);
+// Returns a promise to use for completion
+function _fadeIn(_el) {
+  // Change opacity returns a promise so we are passing that up
+  return _changeOpacity(_el, 1, 500);
 };
 
 // Fade out individual snackbar
-function _fadeOut(_el, cb) {
-  _changeOpacity(_el, 0, 500, cb);
+// Returns a promise to use for completion
+function _fadeOut(_el) {
+  // Change opacity returns a promise so we are passing that up
+  return _changeOpacity(_el, 0, 500);
 };
 
 // Change opacity
 //   _el: element
 //   value: the opacity value
 //   time: the amount of time
-//   cb: callback when done
-function _changeOpacity(_el, value, time, cb) {
+// Returns a promise to use for completion
+function _changeOpacity(_el, value, time) {
   // rate of change
   var fps = 24;
   var time_per_frame = time / fps;
@@ -346,21 +353,24 @@ function _changeOpacity(_el, value, time, cb) {
   // change for opacity
   var diff = value - current_opacity;
   var delta = diff / time_per_frame;
-  var interval = setInterval(change, time_per_frame);
-  function change() {
-    // Set new opacity
-    current_opacity += delta;
-    current_opacity = current_opacity < 0 ? 0 : current_opacity;
-    current_opacity = current_opacity > 1 ? 1 : current_opacity;
-    _el.style.opacity = current_opacity;
-    // Check if done
-    if (current_opacity === 1 || current_opacity === 0) {
-      // Call cb if exists
-      if (cb) cb();
-      // End interval
-      clearInterval(interval);
+
+  // Return a promise so we know when this is done
+  return new Promise(function (resolve, reject) {
+    var interval = setInterval(change, time_per_frame);
+    function change() {
+      // Set new opacity
+      current_opacity += delta;
+      current_opacity = current_opacity < 0 ? 0 : current_opacity;
+      current_opacity = current_opacity > 1 ? 1 : current_opacity;
+      _el.style.opacity = current_opacity;
+      // Check if done
+      if (current_opacity === 1 || current_opacity === 0) {
+        // End interval and resolve the promise
+        clearInterval(interval);
+        resolve();
+      }
     }
-  }
+  });
 };
 
 // Callback when DOM is ready

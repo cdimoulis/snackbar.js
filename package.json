@@ -43,7 +43,7 @@
     "collectCoverageFrom": [
       "src/**.js",
       "!**/node_modules/**",
-      "!**/assets/**",
+      "!**/vendor/assets/javascripts/**",
       "!**/configs/**"
     ]
   }
