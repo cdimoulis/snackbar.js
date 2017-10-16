@@ -64,13 +64,7 @@ class Snackbar {
 
       // Fade in and when complete set timeout for fade out if not manual close
       return _fadeIn(_snackbar).then( () => {
-        // If not manual_close then set timeout for removal
-        if (!opts.manual_close) {
-          setTimeout(() => {
-            this._removeSnackbar(_snackbar);
-          }, opts.time);
-        }
-
+        this._setClose(_snackbar, opts);
       });
     }
     // Add to queue to show after DOM is ready
@@ -133,6 +127,23 @@ class Snackbar {
   /**********
   / PRIVATE FUNCTIONS
   /**********/
+
+  // Set the timeout for closing the snackbar if not opts.manual_close
+  _setClose(snackbar, opts) {
+    // If not manual_close then set timeout for removal
+    return new Promise( (resolve, reject) => {
+      if (!opts.manual_close) {
+        setTimeout(() => {
+          this._removeSnackbar(snackbar).then( () => {
+            resolve();
+          });
+        }, opts.time);
+      }
+      else {
+        resolve();
+      }
+    });
+  }
 
   // Setup the elemends on the DOM
   _setDom() {
@@ -288,3 +299,5 @@ function _ready(cb) {
 };
 
 window.Snackbar = Snackbar;
+
+export default Snackbar

@@ -35,6 +35,18 @@ test('onclick', () => {
   });
 });
 
+// Test the _onClose function
+test('_onClose', () => {
+  let snack = new Snackbar();
+  // Manual close so we have to call _setClose manually
+  snack.message('close', {manual_close: true});
+  let s = document.getElementsByClassName('snackbar')[0];
+  return snack._setClose(s, {manual_close: false, time: 500}).then( () => {
+    expect(s.style.opacity).toBe('0');
+    expect(document.getElementsByClassName('snackbar')[0]).toBeUndefined();
+  });
+});
+
 function clearElement(wrapper) {
   while (wrapper.hasChildNodes()) {
     wrapper.removeChild(wrapper.lastChild);
