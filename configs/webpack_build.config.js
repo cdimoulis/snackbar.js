@@ -1,8 +1,6 @@
 const webpack = require('webpack');
 const path = require('path');
 
-// Pass in opts to setup configs
-//   opts.entry: the name of the entry file
 const config = {
 
   entry: './src/snackbar.js',

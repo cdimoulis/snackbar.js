@@ -70,6 +70,10 @@
 "use strict";
 
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -132,6 +136,8 @@ var Snackbar = function () {
   // Main function to display the snackbar
   // message: text to display
   // opt: default override options to send
+  // Returns a promise that will resolve when fully faded in OR
+  // null if it cannot be added yet
 
 
   _createClass(Snackbar, [{
@@ -146,12 +152,7 @@ var Snackbar = function () {
 
         // Fade in and when complete set timeout for fade out if not manual close
         return _fadeIn(_snackbar).then(function () {
-          // If not manual_close then set timeout for removal
-          if (!opts.manual_close) {
-            setTimeout(function () {
-              _this2._removeSnackbar(_snackbar);
-            }, opts.time);
-          }
+          _this2._setClose(_snackbar, opts);
         });
       }
       // Add to queue to show after DOM is ready
@@ -163,18 +164,22 @@ var Snackbar = function () {
     // Helper for message that sticks until manually closed
     // message: text to display
     // opt: default override options to send
+    // Returns a promise that will resolve when fully faded in OR
+    // null if it cannot be added yet
 
   }, {
     key: 'stickyMessage',
     value: function stickyMessage(message, opts) {
       opts = Object.assign({}, this.options, opts);
       opts.manual_close = true;
-      this.message(message, opts);
+      return this.message(message, opts);
     }
 
     // Helper for success snackbar
     // message: text to display
     // opt: default override options to send
+    // Returns a promise that will resolve when fully faded in OR
+    // null if it cannot be added yet
 
   }, {
     key: 'success',
@@ -182,12 +187,14 @@ var Snackbar = function () {
       opts = Object.assign({}, this.options, opts);
       opts.class = opts.class || '';
       opts.class += ' success';
-      this.message(message, opts);
+      return this.message(message, opts);
     }
 
     // Helper for error snackbar
     // message: text to display
     // opt: default override options to send
+    // Returns a promise that will resolve when fully faded in OR
+    // null if it cannot be added yet
 
   }, {
     key: 'error',
@@ -195,12 +202,14 @@ var Snackbar = function () {
       opts = Object.assign({}, this.options, opts);
       opts.class = opts.class || '';
       opts.class += ' error';
-      this.message(message, opts);
+      return this.message(message, opts);
     }
 
     // Helper for warn snackbar
     // message: text to display
     // opt: default override options to send
+    // Returns a promise that will resolve when fully faded in OR
+    // null if it cannot be added yet
 
   }, {
     key: 'warn',
@@ -208,7 +217,7 @@ var Snackbar = function () {
       opts = Object.assign({}, this.options, opts);
       opts.class = opts.class || '';
       opts.class += ' warn';
-      this.message(message, opts);
+      return this.message(message, opts);
     }
 
     /********
@@ -219,12 +228,33 @@ var Snackbar = function () {
     / PRIVATE FUNCTIONS
     /**********/
 
+    // Set the timeout for closing the snackbar if not opts.manual_close
+
+  }, {
+    key: '_setClose',
+    value: function _setClose(snackbar, opts) {
+      var _this3 = this;
+
+      // If not manual_close then set timeout for removal
+      return new Promise(function (resolve, reject) {
+        if (!opts.manual_close) {
+          setTimeout(function () {
+            _this3._removeSnackbar(snackbar).then(function () {
+              resolve();
+            });
+          }, opts.time);
+        } else {
+          resolve();
+        }
+      });
+    }
+
     // Setup the elemends on the DOM
 
   }, {
     key: '_setDom',
     value: function _setDom() {
-      var _this3 = this;
+      var _this4 = this;
 
       var _body = document.getElementsByTagName('body')[0];
       // If the Body exists
@@ -240,7 +270,7 @@ var Snackbar = function () {
       // if body is not available then call when DOM is ready
       else {
           _ready(function () {
-            _this3._setDom();
+            _this4._setDom();
           });
         }
     }
@@ -264,7 +294,7 @@ var Snackbar = function () {
     // message: text to display
     // opt: options to send
     value: function _addSnackbar(message, opts) {
-      var _this4 = this;
+      var _this5 = this;
 
       var _this = this;
       var _snackbar_wrapper = document.getElementById('snackbar-wrapper');
@@ -292,7 +322,8 @@ var Snackbar = function () {
           _close.appendChild(_x);
           // Apply click event for X
           _close.onclick = function () {
-            _this4._removeSnackbar(_snackbar);
+            // Returns the promise from removing snackbar
+            return _this5._removeSnackbar(_snackbar);
           };
           _snackbar.appendChild(_close);
         }
@@ -394,6 +425,8 @@ function _ready(cb) {
 };
 
 window.Snackbar = Snackbar;
+
+exports.default = Snackbar;
 
 /***/ })
 /******/ ]);
