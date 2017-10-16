@@ -14,7 +14,7 @@
     "email": "christopherjamesd@gmail.com",
     "url": "http://chrisdimoulis.com"
   },
-  "main": "lib/snackbar.js",
+  "main": "vendor/assests/javascript/snackbar.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/cdimoulis/snackbar.js.git"

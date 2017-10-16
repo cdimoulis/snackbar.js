@@ -374,12 +374,12 @@ function _ready(cb) {
   }
   // Otherwise attach the state change event
   else if (document.attachEvent) {
-      document.attachEvent('onreadystatechange'), function () {
-        if (document.readyState === 'interactive') {
+      document.attachEvent('onreadystatechange', function () {
+        if (document.readyState === 'interactive' || document.readyState === 'complete') {
           document.detachEvent('onreadystatechange', this.callee);
           cb();
         }
-      };
+      });
     }
 };
 

@@ -7,7 +7,7 @@ const config = {
 
   entry: './src/snackbar.js',
   output: {
-    path: path.resolve('.', 'assets/js'),
+    path: path.resolve('.', 'vendor/assets/javascripts'),
     filename: 'snackbar.js',
   },
   module: {
