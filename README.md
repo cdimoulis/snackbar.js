@@ -16,7 +16,7 @@ View exmple at http://chrisdimoulis.com/snackbar.js
 
 ## Installation
 
-### NPM
+### Node
 
 ```
 npm install --save vanilla-snackbar
@@ -26,7 +26,7 @@ npm install --save vanilla-snackbar
 
 ### Importing/Including
 
-**NPM**
+**Node**
 
 Import `vanilla-snackbar` into your module:
 ```js
