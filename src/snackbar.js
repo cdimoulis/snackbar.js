@@ -1,3 +1,5 @@
+import './snackbar.scss';
+
 /***************
 Snackbar.js
 https://github.com/cdimoulis/snackbar.js
@@ -27,7 +29,7 @@ Display a message with a orangish/yellow backbround (adds class 'warn') ->
 
 ****************/
 
-this.Snackbar = function(options) {
+class Snackbar {
   /************
 	Feature wide options. These options will be set at all time unless
   overridden by options passed in each call
@@ -38,9 +40,14 @@ this.Snackbar = function(options) {
     class: String containing desired classes.
       Default: null
   ************/
-  options = options || {manual_close: false, time: 5000};
-  // If called before DOM is ready then maintain list to execute;
-  var pre_dom_queue = [];
+  constructor(options) {
+    this.options = options || {manual_close: false, time: 5000};
+    // If called before DOM is ready then maintain list to execute;
+    this.pre_dom_queue = [];
+
+    // Setup DOM
+    this._setDom();
+  }
 
   /**********
   / PUBLIC FUNCTIONS
@@ -49,75 +56,99 @@ this.Snackbar = function(options) {
   // Main function to display the snackbar
   // message: text to display
   // opt: default override options to send
-  this.message = function(message, opts) {
-    opts = Object.assign({},options,opts);
-    var _snackbar = _addSnackbar(message, opts);
+  // Returns a promise that will resolve when fully faded in OR
+  // null if it cannot be added yet
+  message(message, opts) {
+    opts = Object.assign({}, this.options, opts);
+    var _snackbar = this._addSnackbar(message, opts);
     // Show if _snackbar Element is created
     if (_snackbar) {
-      _fadeIn(_snackbar);
-      // If not manual_close then set timeout for removal
-      if (!opts.manual_close) {
-        setTimeout(function() {
-          _removeSnackbar(_snackbar);
-        }, opts.time);
-      }
+
+      // Fade in and when complete set timeout for fade out if not manual close
+      return _fadeIn(_snackbar).then( () => {
+        this._setClose(_snackbar, opts);
+      });
     }
     // Add to queue to show after DOM is ready
     else {
-      pre_dom_queue.push({snackbar: this, message: message, opts: opts});
+      this.pre_dom_queue.push({snackbar: this, message: message, opts: opts});
     }
   }
 
 	// Helper for message that sticks until manually closed
   // message: text to display
   // opt: default override options to send
-  this.stickyMessage = function(message, opts) {
-    opts = Object.assign({},options,opts);
+  // Returns a promise that will resolve when fully faded in OR
+  // null if it cannot be added yet
+  stickyMessage(message, opts) {
+    opts = Object.assign({}, this.options, opts);
     opts.manual_close = true;
-    this.message(message, opts);
+    return this.message(message, opts);
   }
 
   // Helper for success snackbar
   // message: text to display
   // opt: default override options to send
-  this.success = function(message, opts) {
-    opts = Object.assign({},options,opts);
+  // Returns a promise that will resolve when fully faded in OR
+  // null if it cannot be added yet
+  success(message, opts) {
+    opts = Object.assign({}, this.options, opts);
     opts.class = opts.class || '';
     opts.class += ' success';
-    this.message(message, opts);
+    return this.message(message, opts);
   }
 
   // Helper for error snackbar
   // message: text to display
   // opt: default override options to send
-  this.error = function(message, opts) {
-    opts = Object.assign({},options,opts);
+  // Returns a promise that will resolve when fully faded in OR
+  // null if it cannot be added yet
+  error(message, opts) {
+    opts = Object.assign({}, this.options, opts);
     opts.class = opts.class || '';
     opts.class += ' error';
-    this.message(message, opts);
+    return this.message(message, opts);
 	}
 
   // Helper for warn snackbar
   // message: text to display
   // opt: default override options to send
-  this.warn = function(message, opts) {
-    opts = Object.assign({},options,opts);
+  // Returns a promise that will resolve when fully faded in OR
+  // null if it cannot be added yet
+  warn(message, opts) {
+    opts = Object.assign({}, this.options, opts);
     opts.class = opts.class || '';
     opts.class += ' warn';
-    this.message(message, opts);
+    return this.message(message, opts);
 	}
 
   /********
   / END PUBLIC FUNCTIONS
   *********/
 
-
   /**********
   / PRIVATE FUNCTIONS
   /**********/
 
+  // Set the timeout for closing the snackbar if not opts.manual_close
+  _setClose(snackbar, opts) {
+    // If not manual_close then set timeout for removal
+    return new Promise( (resolve, reject) => {
+      if (!opts.manual_close) {
+        setTimeout(() => {
+          this._removeSnackbar(snackbar).then( () => {
+            resolve();
+          });
+        }, opts.time);
+      }
+      else {
+        resolve();
+      }
+    });
+  }
+
   // Setup the elemends on the DOM
-  var _setDom = function() {
+  _setDom() {
     var _body = document.getElementsByTagName('body')[0];
     // If the Body exists
     if (_body) {
@@ -127,28 +158,28 @@ this.Snackbar = function(options) {
         _outer_wrapper.id = 'snackbar-wrapper';
         _body.appendChild(_outer_wrapper);
       }
-      if (pre_dom_queue.length > 0)
-        _flushQueue();
+      if (this.pre_dom_queue.length > 0)
+        this._flushQueue();
     }
     // if body is not available then call when DOM is ready
     else {
-      _ready(_setDom);
+      _ready(() => {this._setDom();});
     }
   };
 
   // Flush out the pre_dom_queue
-  var _flushQueue = function() {
-    for(i = 0; i < pre_dom_queue.length; i++) {
-      var sb = pre_dom_queue[i];
+  _flushQueue() {
+    for(let i = 0; i < this.pre_dom_queue.length; i++) {
+      var sb = this.pre_dom_queue[i];
       sb.snackbar.message(sb.message, sb.opts);
     }
-    pre_dom_queue = [];
+    this.pre_dom_queue = [];
   };
 
   // Add the snackbar
   // message: text to display
   // opt: options to send
-  var _addSnackbar = function(message, opts) {
+  _addSnackbar(message, opts) {
     var _this = this;
     var _snackbar_wrapper = document.getElementById('snackbar-wrapper');
     // Only create snackbar if snackbar wrapper is in DOM
@@ -174,8 +205,9 @@ this.Snackbar = function(options) {
         var _x = document.createTextNode('X');
         _close.appendChild(_x);
         // Apply click event for X
-        _close.onclick = function(){
-          _removeSnackbar(_snackbar);
+        _close.onclick = () => {
+          // Returns the promise from removing snackbar
+          return this._removeSnackbar(_snackbar);
         };
         _snackbar.appendChild(_close);
       }
@@ -185,37 +217,52 @@ this.Snackbar = function(options) {
   };
 
   // Remove a snackbar
-  var _removeSnackbar = function(_el) {
-    _fadeOut(_el, function() {
-      // Remove the individual snackbar
+  _removeSnackbar(_el) {
+    // _fadeOut returns a promise to use for completion
+    return _fadeOut(_el).then( () => {
       _el.remove();
     });
   };
+  /**********
+  / END PRIVATE FUNCTIONS
+  /**********/
+};
 
-  // Fade in individual snackbar
-  var _fadeIn = function(_el) {
-    _changeOpacity(_el, 1, 500);
-  };
+/*******
+* Helper FUNCTIONS
+*******/
 
-  // Fade out individual snackbar
-  var _fadeOut = function(_el, cb) {
-    _changeOpacity(_el, 0, 500, cb);
-  };
+// Fade in individual snackbar
+// Returns a promise to use for completion
+function _fadeIn(_el) {
+  // Change opacity returns a promise so we are passing that up
+  return _changeOpacity(_el, 1, 500);
+};
 
-  // Change opacity
-  //   _el: element
-  //   value: the opacity value
-  //   time: the amount of time
-  //   cb: callback when done
-  var _changeOpacity = function(_el, value, time, cb) {
-    // rate of change
-    var fps = 24;
-    var time_per_frame = time/fps;
-    // current opacity
-    var current_opacity = parseFloat(_el.style.opacity) || 0;
-    // change for opacity
-    var diff = value - current_opacity;
-    var delta = diff/time_per_frame;
+// Fade out individual snackbar
+// Returns a promise to use for completion
+function _fadeOut(_el) {
+  // Change opacity returns a promise so we are passing that up
+  return _changeOpacity(_el, 0, 500);
+};
+
+// Change opacity
+//   _el: element
+//   value: the opacity value
+//   time: the amount of time
+// Returns a promise to use for completion
+function _changeOpacity(_el, value, time) {
+  // rate of change
+  var fps = 24;
+  var time_per_frame = time/fps;
+  // current opacity
+  var current_opacity = parseFloat(_el.style.opacity) || 0;
+  // change for opacity
+  var diff = value - current_opacity;
+  var delta = diff/time_per_frame;
+
+  // Return a promise so we know when this is done
+  return new Promise( (resolve, reject) => {
     var interval = setInterval(change, time_per_frame);
     function change() {
       // Set new opacity
@@ -225,38 +272,34 @@ this.Snackbar = function(options) {
       _el.style.opacity = current_opacity;
       // Check if done
       if (current_opacity === 1 || current_opacity === 0){
-        // Call cb if exists
-        if (cb)
-          cb();
-        // End interval
+        // End interval and resolve the promise
         clearInterval(interval);
+        resolve();
       }
     }
-  };
-
-  // Callback when DOM is ready
-  var _ready = function(cb) {
-    // If add event listener is available
-    if (document.addEventListener) {
-      document.addEventListener('DOMContentLoaded', function() {
-        document.removeEventListener('DOMContentLoaded', arguments.callee);
-        cb();
-      });
-    }
-    // Otherwise attach the state change event
-    else if (document.attachEvent) {
-      document.attachEvent('onreadystatechange'), function() {
-        if (document.readyState === 'interactive') {
-          document.detachEvent('onreadystatechange',arguments.callee);
-          cb();
-        }
-      }
-    }
-  };
-  /**********
-  / END PRIVATE FUNCTIONS
-  /**********/
-
-  // Setup DOM
-  _setDom();
+  });
 };
+
+// Callback when DOM is ready
+function _ready(cb) {
+  // If add event listener is available
+  if (document.addEventListener) {
+    document.addEventListener('DOMContentLoaded', function() {
+      document.removeEventListener('DOMContentLoaded', this.callee);
+      cb();
+    });
+  }
+  // Otherwise attach the state change event
+  else if (document.attachEvent) {
+    document.attachEvent('onreadystatechange', function() {
+      if (document.readyState === 'interactive' || document.readyState === 'complete') {
+        document.detachEvent('onreadystatechange', this.callee);
+        cb();
+      }
+    });
+  }
+};
+
+window.Snackbar = Snackbar;
+
+export default Snackbar

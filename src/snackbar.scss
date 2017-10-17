@@ -1,0 +1,52 @@
+#snackbar-wrapper {
+  width: 100%;
+  position: fixed;
+  z-index: 999;
+  bottom: 0px;
+	display: block;
+
+  .snackbar {
+  	opacity: 0;
+  	width: 105%;
+    margin-left: -2.5%;
+  	background-color: #333;
+  	color: #fff;
+  	text-align: center;
+  	font-size: 17px;
+  	padding: 16px;
+  }
+
+  .snackbar-close {
+  	width: 12%;
+  	cursor: pointer;
+  	display: block;
+  	top: .1em;
+  	float: right;
+  	margin-right: 3%;
+  }
+
+  .snackbar-text {
+  	width: 85%;
+  	display: inline-block;
+  }
+
+  .success {
+  	background-color: #228822;
+  }
+
+  .error {
+  	background-color: #bb2222;
+  }
+
+  .warn {
+  	background-color: #f3b300;
+  }
+
+  span.snackbar-close {
+    font-family: sans-serif;
+    font-weight: bolder;
+    font-size: inherit;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+  }
+}
