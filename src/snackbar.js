@@ -1,3 +1,5 @@
+import './snackbar.scss';
+
 /***************
 Snackbar.js
 https://github.com/cdimoulis/snackbar.js

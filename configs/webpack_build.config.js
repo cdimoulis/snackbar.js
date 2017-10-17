@@ -19,6 +19,18 @@ const config = {
           presets: ['env']
         }
       }
+    },
+    {
+      test: /\.scss$/,
+      use:[
+        'style-loader',
+        'css-loader',
+      {
+        loader: 'sass-loader',
+        options: {
+          includePaths: [path.resolve('.','/src')]
+        }
+      }]
     }]
   }
 }
