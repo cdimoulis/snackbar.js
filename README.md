@@ -12,24 +12,34 @@ View exmple at http://chrisdimoulis.com/snackbar.js
 [![coverage][cover]][cover-url]
 
 ## Production Dependencies
-**None!**
+**None!** (not even jquery)
+
+## Installation
+
+### NPM
+
+```
+npm install --save vanilla-snackbar
+```
 
 ## Usage
 
-#### Includes
+### Importing/Including
+
 **NPM**
+
 Import `vanilla-snackbar` into your module:
 ```js
 import Snackbar from 'vanilla-snackbar';
 ```
 
-#### Style
+### Style
 See `src/snackbar.scss` for default style and reference if you desire to override any styles.
 
-#### Pre DOM ready
+### Pre DOM ready
 If you create a snackbar and create a message before the DOM is ready the message will be stored in a queue which which will execute once the DOM is ready.
 
-#### Create Snackbar
+### Create Snackbar
 ```javascript
   // New snackbar with defaults
   var default_snack = new Snackbar();
@@ -43,7 +53,7 @@ If you create a snackbar and create a message before the DOM is ready the messag
 
 All options passed when creating the snackbar object are default. Overrides can be passed in each call to display a message.
 
-##### Available Options
+#### Available Options
 * `manual_close`: Boolean. Provide a close X button (true) vs timed close (false). *Default:* false
 * `time`: ms of time before automatic close. (ignored if `manual_close: true`). *Default:* 5000
 * `class`: String containing desired classes to add to snackbar. *Default:* empty
@@ -52,8 +62,13 @@ All options passed when creating the snackbar object are default. Overrides can 
 
 A new Snackbar object will not inject new `#snackbar-wrapper` elements. All Snackbar objects use the same wrapper. It simply creates a new object with a different set of default options for displaying a Snackbar message. See below for overriding default options on a message specific basis as opposed to creating multiple Snackbar objects.
 
-#### Displaying Messages
-*Basics:*
+### Displaying Messages
+
+Displaying a message is as simple as calling the `.message(msg, opts)` function of the Snackbar. There are also four helper methods for common Snackbar usage. All of these functions take 2 parameters:
+
+* `msg`: the message to be displayed.
+* `opts`: the options to override default options.
+
 ```javascript
   // Display a message
   snack.message('Hello World');
@@ -71,7 +86,7 @@ A new Snackbar object will not inject new `#snackbar-wrapper` elements. All Snac
 
 Creating a Snackbar message will return a Promise object. This promise object will resolve when the Snackbar has finished fading in.
 
-#### Overriding Default Options
+### Overriding Default Options
 
 ```javascript
   // New snackbar with defaults
