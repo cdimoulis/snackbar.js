@@ -1,6 +1,6 @@
 {
   "name": "vanilla-snackbar",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A full width snackbar using \"vanilla js\"",
   "keywords": [
     "snackbar",

@@ -102,10 +102,10 @@ Creating a Snackbar message will return a Promise object. This promise object wi
   snack.message("My special snackbar", {class: 'my-snackbar your-snackbar'})
 ```
 
-[npm]: https://img.shields.io/npm/v/snackbar.js.svg
-[npm-url]: https://npmjs.com/package/snackbar.js
+[npm]: https://img.shields.io/npm/v/vanilla-snackbar.svg
+[npm-url]: https://npmjs.com/package/vanilla-snackbar
 
-[node]: https://img.shields.io/node/v/snackbar.js.svg
+[node]: https://img.shields.io/node/v/vanilla-snackbar.svg
 [node-url]: https://nodejs.org
 
 [deps]: https://img.shields.io/david/cdimoulis/snackbar.js.svg
