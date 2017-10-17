@@ -48,6 +48,9 @@
       "!**/node_modules/**",
       "!**/vendor/assets/javascripts/**",
       "!**/configs/**"
-    ]
+    ],
+    "moduleNameMapper": {
+      ".scss$": "../spec/SCSSstub.js"
+    }
   }
 }
