@@ -22,6 +22,18 @@ View exmple at http://chrisdimoulis.com/snackbar.js
 npm install --save vanilla-snackbar
 ```
 
+### Ruby Gem for Rails
+
+```
+gem install vanilla-snackbar
+```
+
+Or simply add to your Gemfile:
+```ruby
+gem 'vanilla-snackbar'
+```
+
+
 ## Usage
 
 ### Importing/Including
@@ -31,6 +43,13 @@ npm install --save vanilla-snackbar
 Import `vanilla-snackbar` into your module:
 ```js
 import Snackbar from 'vanilla-snackbar';
+```
+
+**Rails**
+
+Add to `app/assets/javascripts/application.js`. Note that you should just require snackbar, not vanilla-snackbar.
+```js
+//= require snackbar
 ```
 
 ### Style

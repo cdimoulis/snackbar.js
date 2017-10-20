@@ -7,6 +7,7 @@
 /coverage
 /node_modules
 /tmp
+*.gem
 
 # MACs come on
 .DS_Store
