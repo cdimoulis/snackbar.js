@@ -1,4 +1,4 @@
-Gem.Specification.new do |s|
+Gem::Specification.new do |s|
   s.name          = 'vanilla-snackbar'
   s.version       = '1.0.1'
   s.date          = '2017-10-18'
